@@ -1,5 +1,3 @@
-# PatternsProject
-
 ## Scenario: Book My Ticket
 Passengers will be able to log in, create an account or use our program anonymously, where
 their information will be set by the program. Once they pass the identification page, they will
