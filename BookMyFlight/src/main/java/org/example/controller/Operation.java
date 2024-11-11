@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.controller;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Operation {
+public abstract class Operation {
     private String type;
     private LocalDateTime date;
     private int userId;

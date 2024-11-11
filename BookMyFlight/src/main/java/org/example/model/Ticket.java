@@ -9,14 +9,14 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class Ticket {
-    private int ticketID;
+    private String ticketID;
     private int passengerID;
     private Airplane airplane;
     private String outboundDate;
     private String returnDate;
     private double price;
     private String tripType;
-    private String status;
+    private TicketStatus status;
     private SeatClass seatType;
     private String departure;
     private String destination;
