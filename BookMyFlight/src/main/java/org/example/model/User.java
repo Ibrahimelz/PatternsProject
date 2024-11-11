@@ -18,6 +18,9 @@ public abstract class User {
     private String lastName;
     private String phoneNumber;
     private String email;
+    @Getter
+    @Setter
+    private static int counter = 1;
 
     /**
      * Finds user in the system

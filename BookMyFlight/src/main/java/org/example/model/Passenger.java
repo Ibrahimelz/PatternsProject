@@ -22,7 +22,6 @@ public class Passenger extends User {
     private int cvc;
     private List<Ticket> ticketsList;
     private List<CancelOperation> refundList;
-    private static int counter = 1;
 
     public Passenger(String passengerID, String firstName, String lastName, String phoneNumber, String email,
                      int cardNumber, String cardHolderName, String cardExpirationDate, int cvc) {

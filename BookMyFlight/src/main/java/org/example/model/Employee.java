@@ -40,6 +40,10 @@ public class Employee extends User {
     }
 
     /*TODO
+     public static void createEmployeeAccount(Employee employee) {
+
+     }
+
     public static void removeTicket(Ticket ticket){
 
     }
