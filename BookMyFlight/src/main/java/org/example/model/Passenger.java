@@ -3,121 +3,124 @@ package org.example.model;
 import lombok.*;
 import org.example.controller.AirlineTicketSystem;
 import org.example.controller.CancelOperation;
+import org.example.controller.Operation;
+import org.example.controller.PaymentOperation;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 public class Passenger extends User {
-    private int credits;
-    private int cardNumber;
-    private String cardHolderName;
-    private String cardExpirationDate;
-    private int cvc;
-    private List<Ticket> ticketsList;
-    private List<CancelOperation> refundList;
+    @Getter private int credits;
+    @Getter private int cardNumber;
+    @Getter private String cardHolderName;
+    @Getter private String cardExpirationDate;
+    @Getter private int cvc;
+    @Getter private List<Ticket> ticketsList;
+    @Getter private List<CancelOperation> refundList;
 
-    public Passenger(String passengerID, String firstName, String lastName, String phoneNumber, String email,
-                     int cardNumber, String cardHolderName, String cardExpirationDate, int cvc) {
-        super(passengerID, firstName, lastName, phoneNumber, email);
-        this.cardNumber = cardNumber;
-        this.cardHolderName = cardHolderName;
-        this.cardExpirationDate = cardExpirationDate;
-        this.cvc = cvc;
+    public Passenger( String firstName, String lastName, String phoneNumber, String email, String password) {
+        //passengerID becomes the generateID?
+        super(generateId(), firstName, lastName, phoneNumber, email, password);
+        this.cardNumber = 0;
+        this.cardHolderName = null;
+        this.cardExpirationDate = null;
+        this.cvc = 0;
         this.credits = 0;
         this.ticketsList = new LinkedList<>();
         this.refundList = new LinkedList<>();
     }
 
+
     /**
-     * Creates an account for a passenger and adds him into the system
-     * @param passenger the input passenger
+     * Validates, Creates a regular passenger account and adds it to the passenger list
+     * @param firstName first name entered by the passenger
+     * @param LastName  last name first entered by the passenger
+     * @param phoneNumber   phone number first entered by the passenger
+     * @param email email entered by the passenger
+     * @param password password entered by the passenger
      */
-    public static void createPassengerAccount(Passenger passenger) {
-        passenger.setUserID(generateId());
-        if (!validateInputPassengerCreation(passenger)) {
-            throw new IllegalArgumentException("Passenger information provided is incorrect");
+    //SHOULD I MAKE IT RETURN A BOOLEAN INSTEAD? IF TRUE = BUTTON APPEARS
+    public void addRegularPassenger(String firstName, String LastName, String phoneNumber, String email, String password) {
+        if (!validateInputPassengerCreation(firstName, LastName, phoneNumber, email, password)) {
+            throw new IllegalArgumentException("Passenger information provided is incorrect!");
         }
+        if (findUserInSystem(email) != null) {   //CHECK IF PASSENGER HAS ALREADY AN ACCOUNT
+            throw new IllegalArgumentException("Account already exists!");
+        }
+        Passenger passenger = new Regular(firstName, lastName, phoneNumber, email, password);
         AirlineTicketSystem.getPassengers().add(passenger);
     }
 
     /**
-     * Generates an id with a specific format
-     * @return the formatted generated id
+     * Validate card input from the passenger
+     * @param cardNumber card number that they have entered
+     * @param cardHolderName card name that they have entered
+     * @param cardExpirationDate card expiration date
+     * @param cvc
+     * @return
      */
-    private static String generateId() {
-        counter++;
-        return String.format("000%02d", counter);
-    }
-
-    /**
-     * Validates input information for creation of a Passenger and ensures that all conditions are checked individually
-     * @param passenger the input passenger
-     * @return validation of the passenger information
-     */
-    private static boolean validateInputPassengerCreation(Passenger passenger) {
-        if (!passenger.getFirstName().matches("[a-zA-Z]{1,50}") || !passenger.getLastName().matches("[a-zA-Z]{1,50}")) {
+    public boolean validatePaymentInput(String cardNumber,String cardHolderName, String cardExpirationDate, String cvc) {
+        LocalDate present = LocalDate.now();
+        if ((!cardNumber.matches("\\d{13,19}"))) {
             return false;
         }
-        if (!passenger.getPhoneNumber().matches("\\d{1,15}")) {
+        if (!cardHolderName.matches("[a-zA-Z]+( [a-zA-Z]+)*")) {    //verifies if only letter and can have spaces between strings
             return false;
         }
-        if (passenger.getEmail().length() > 255 || !passenger.getEmail().contains("@") || !passenger.getEmail().contains(".")) {
+        if (!cardExpirationDate.matches("^(0[1-9]|1[0-2])/\\d{2}$")) {
             return false;
         }
-        String cardNumberStr = String.valueOf(passenger.getCardNumber());
-        if (!cardNumberStr.matches("\\d{13,19}")) {
+        if (cvc.matches("\\d{100,999}")) {
             return false;
         }
-        if (!passenger.getCardHolderName().matches("[a-zA-Z ]{1,50}")) {
-            return false;
-        }
-        if (!passenger.getCardExpirationDate().matches("\\d{4}-\\d{2}-\\d{2}")) {
-            return false;
-        }
-        try { // Validate cardExpirationDate: ensure format is YYYY-MM-DD and date is in the future
-            LocalDate expirationDate = LocalDate.parse(passenger.getCardExpirationDate(), DateTimeFormatter.ISO_LOCAL_DATE);
-            if (!expirationDate.isAfter(LocalDate.now())) {
-                return false;
-            }
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-        if (passenger.getCvc() < 100 || passenger.getCvc() > 999) {
+        if (!verifyExpirationDate(cardExpirationDate)) {
             return false;
         }
         return true;
     }
 
     /**
-     * Books a ticket for a passenger
-     * @param ticket the desired ticket
-     * @param passenger the passenger that wants to book the ticket
+     * Verify if there are seats available
+     * @param ticket containing the airplane and its seats available
      */
-    public static void bookTicket(Ticket ticket, Passenger passenger) {
-        if (!User.findUserInSystem(passenger.getUserID())) {
-            throw new IllegalArgumentException("Wrong login credentials");
+    public void verifySeatsAvailable(Ticket ticket) {
+        if (ticket.getAirplane().getAvailableSeats() == 0) {
+            throw new IllegalArgumentException("No available seats!");
         }
-        if (AirlineTicketSystem.getUnbookedTickets().stream()
-                .noneMatch(unbookedTicket -> unbookedTicket.equals(ticket))) {
-            throw new IllegalArgumentException("This ticket is unavailable");
-        }
-        payTicket(passenger.getCardExpirationDate(), passenger.getCredits(), ticket.getPrice());
-        ticket.setTicketID(passenger.getUserID());
-        deductCredit(calculateDiscountWithCredits(passenger.getCredits()), passenger);
-        AirlineTicketSystem.getUnbookedTickets().remove(ticket);
-        passenger.getTicketsList().add(ticket);
     }
 
-    /* TODO
-    public static void requestRefund(int ticketID){
 
+    /**
+     * When requesting a refund, the passenger will send a request to an employee, along with their ticket information
+     * @param ticket that will be refunded
+     */
+    public void requestRefund(Ticket ticket){
+        Employee.getTicketsToCancel().add(ticket);
     }
-    */
+
+    /**
+     * Ensures that the registered passenger card is still valid
+     * @param cardExpirationDate the input card expiration date
+     * @return whether the card is expired or not
+     */
+    private boolean verifyExpirationDate(String cardExpirationDate) {
+        try {
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/yy");
+            LocalDate date = LocalDate.parse(cardExpirationDate, format);
+            if (!date.isAfter(LocalDate.now())) {
+                return false;
+            }
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+            return true;
+    }
 }

@@ -3,6 +3,7 @@ package org.example.model;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 import org.example.controller.*;
 import lombok.*;
@@ -13,37 +14,123 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public abstract class User {
-    private String userID;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String email;
-    @Getter
-    @Setter
-    private static int counter = 1;
+    protected String userID;
+    protected String firstName;
+    protected String lastName;
+    protected String phoneNumber;
+    protected String email;
+    protected String password;
+    @Getter protected static int counter = 1;
 
     /**
-     * Finds user in the system
-     * @param userID the input user id
-     * @return whether the user is found or not
+     * Generates an id with a specific format
+     * @return the formatted generated id
      */
-    public static boolean findUserInSystem(String userID) {
-        return AirlineTicketSystem.getPassengers().stream().anyMatch(p -> p.getUserID().equals(userID)) ||
-                AirlineTicketSystem.getEmployees().stream().anyMatch(e -> e.getUserID().equals(userID));
+    public static String generateId() {
+        int id = User.getCounter();
+        return String.format("000%02d", id++);
     }
 
     /**
-     * Pays ticket with the card of the client and client discount if he has credits
-     * @param cardExpirationDate the input expiration date of the card
-     * @param passengerCredits   the input passenger credits
-     * @param ticketPrice        the input ticket price
+     * Validates if inputted data to create an account for passenger is valid or not
+     * @param firstName first name that will be validated
+     * @param LastName  last name that will be validated
+     * @param phoneNumber phone number that will be validated
+     * @param email email that will be validated
+     * @return true if all fields entered are valid and false if a field is incorrect
      */
-    public static void payTicket(String cardExpirationDate, int passengerCredits, double ticketPrice) {
-        if (!validatePayment(cardExpirationDate)) {
-            throw new IllegalArgumentException("Card is expired!");
+    public boolean validateInputPassengerCreation(String firstName, String LastName, String phoneNumber, String email, String password) {
+        if (!firstName.matches("[a-zA-Z]{1,50}") || !LastName.matches("[a-zA-Z]{1,50}")) {
+            return false;
         }
-        double newTicketPrice = calculateNewTicketPrice(ticketPrice, passengerCredits);
-        System.out.println("Thank you for your purchase! Your " + newTicketPrice + "$ ticket is confirmed.");
+        if (!phoneNumber.matches("\\d{10}")) {   //CHECK IF IT CONTAINS 10DIGITS ONLY: 123-456-7890 (no "-" in input)
+            return false;
+        }
+        if (!(email.length() >= 5 && email.length() <= 254) || !email.contains("@") || !email.contains(".")) {
+            return false;
+        }
+        if (password.length() < 5 || password.length() > 20) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Finds user in the system
+     * @param email the email that will be used to search for the
+     * @return the user if they were found
+     */
+    public User findUserInSystem(String email) {
+        for (Passenger passenger : AirlineTicketSystem.getPassengers()) {
+            if (passenger.getEmail().equals(email)) {
+                return passenger;
+            }
+        }
+
+        for (Employee employee : AirlineTicketSystem.getEmployees()) {
+            if (employee.getEmail().equals(email)) {
+                return employee;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * When booking a ticket, the passenger will pay and their ticket will be set as their userID.
+     * If they used a discount, their credits will decrease.
+     * The ticket will get be removed from the unbooked tickets list and added to the passengers tickets.
+     * The available seats on the plane will decrease depending on the amount of tickets associated to the plane.
+     * @param tickets the tickets that will be booked
+     * @param passenger the passenger that wants to book the ticket
+     */
+    public void bookTickets(Passenger passenger, List<Ticket> tickets) {
+        payForTickets(passenger, tickets);
+
+        for (Ticket ticket : tickets) {
+            ticket.setTicketID(passenger.getUserID());
+            AirlineTicketSystem.getUnbookedTickets().remove(ticket);
+            removeSeatFromAirplane(ticket);
+            passenger.getTicketsList().add(ticket);
+        }
+
+        double discount = calculateDiscountWithCredits(passenger.getCredits());
+        passenger.setCredits(passenger.getCredits() - deductCredit(discount));
+    }
+
+    /**
+     * Tickets that the passenger will pay. If they have enough credentials, their first ticket will get a discount
+     * @param passenger
+     * @param tickets
+     * @return
+     */
+    public double payForTickets(Passenger passenger, List<Ticket> tickets) {
+        double totalAmount = calculateNewTicketPrice(tickets.get(0), passenger.getCredits());;
+        createPaymentOperation(tickets.get(0), totalAmount, passenger);
+
+        for (int i = 1; i < tickets.size(); i++) {
+            totalAmount += tickets.get(i).getPrice();
+            createPaymentOperation(tickets.get(i), tickets.get(i).getPrice(), passenger);
+        }
+        return totalAmount;// may be used***
+    }
+
+    /**
+     * Stores the payment information for a ticket by creating a payment operation
+     * @param ticket provides ticketID
+     * @param totalAmount amount that will be paid for the ticket
+     */
+    private void createPaymentOperation(Ticket ticket, double totalAmount, Passenger passenger) {
+        PaymentOperation paymentOperation = new PaymentOperation("Payment Type", passenger);
+        paymentOperation.getPaymentPerTicket().put(ticket.getTicketID(), totalAmount);
+    }
+
+    /**
+     * After purchasing a ticket, specific number of seats gets removed from airplane available seats
+     * @param ticket containing the airplane and its seats available
+     * @return number of seats left
+     */
+    public int removeSeatFromAirplane(Ticket ticket) {
+        return ticket.getAirplane().getAvailableSeats() - 1;
     }
 
     /**
@@ -69,45 +156,32 @@ public abstract class User {
 
     /**
      * Calculates the new price of the ticket after the discount
-     * @param ticketPrice     the input ticket price
+     * @param ticket initial price of the ticket
      * @param passengerCredit the input passenger credit
      * @return the new ticket price after discount
      */
-    private static double calculateNewTicketPrice(double ticketPrice, int passengerCredit) {
-        return ticketPrice - (ticketPrice * calculateDiscountWithCredits(passengerCredit));
-    }
 
-    /**
-     * Ensures that the registered passenger card is still valid
-     * @param cardExpirationDate the input card expiration date
-     * @return whether the card is expired or not
-     */
-    private static boolean validatePayment(String cardExpirationDate) {
-        try {
-            LocalDate expirationDate = LocalDate.parse(cardExpirationDate, DateTimeFormatter.ISO_LOCAL_DATE);
-            if (!expirationDate.isAfter(LocalDate.now())) {
-                return false;
-            }
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-        return true;
+    //RETURN TO PRIVATE
+    public static double calculateNewTicketPrice(Ticket ticket, int passengerCredit) {
+        return ticket.getPrice() - (ticket.getPrice() * calculateDiscountWithCredits(passengerCredit));
+
     }
 
     /**
      * Deducts credits from the amount of credits of a passenger after he had a discount
      * @param discount  the input discount
-     * @param passenger the input passenger
      */
-    public static void deductCredit(double discount, Passenger passenger) {
+    public int deductCredit(double discount) {
+        //MAKE IT A SWITCH
         if (discount == 0.05) {
-            passenger.setCredits(passenger.getCredits() - 500);
+            return 500;
         } else if (discount == 0.1) {
-            passenger.setCredits(passenger.getCredits() - 1000);
+            return 1000;
         } else if (discount == 0.15) {
-            passenger.setCredits(passenger.getCredits() - 1500);
+            return 1500;
         } else if (discount == 0.2) {
-            passenger.setCredits(passenger.getCredits() - 2000);
+            return 2000;
         }
+        return 0;
     }
 }

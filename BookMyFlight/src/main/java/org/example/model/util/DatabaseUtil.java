@@ -57,7 +57,7 @@ public class DatabaseUtil {
                 operationID INTEGER PRIMARY KEY,
                 passenger_id INTEGER NOT NULL, 
                 employee_id INTEGER NOT NULL,
-                type VARCHAR(16) NOT NULL CHECK(type IN ('CancelOperation', 'PaymentOperation')),
+                type TEXT NOT NULL CHECK(type IN ('CancelOperation', 'PaymentOperation')),
                 date DATETIME NOT NULL,                 -- G pas mit localDateTime ici pcq sa fait plus de sens de le mettre dans java que ici, pcq en premier sa se passe en java ensuite sql, so sql localdatetime va etre en retard de klk seconde so cpa efficient 
                 refunded DOUBLE NOT NULL CHECK(refunded >= 0),
                 totalPayment DOUBLE NOT NULL CHECK(totalPayment >= 0),

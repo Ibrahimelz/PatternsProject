@@ -10,7 +10,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class Ticket {
     private String ticketID;
-    private int passengerID;
+    @Getter private String passengerID;
     private Airplane airplane;
     private String outboundDate;
     private String returnDate;
@@ -21,4 +21,17 @@ public class Ticket {
     private String departure;
     private String destination;
 
+    public Ticket(String ticketID, Airplane airplane, String outboundDate, String returnDate, double price, String tripType, TicketStatus status, SeatClass seatType, String departure, String destination) {
+        this.ticketID = ticketID;
+        this.passengerID = null;
+        this.airplane = airplane;
+        this.outboundDate = outboundDate;
+        this.returnDate = returnDate;
+        this.price = price;
+        this.tripType = tripType;
+        this.status = status;
+        this.seatType = seatType;
+        this.departure = departure;
+        this.destination = destination;
+    }
 }

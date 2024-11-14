@@ -13,5 +13,5 @@ import java.time.LocalDateTime;
 public abstract class Operation {
     private String type;
     private LocalDateTime date;
-    private int userId;
+    private String userId;
 }

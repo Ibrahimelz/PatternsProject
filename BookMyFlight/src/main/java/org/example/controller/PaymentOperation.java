@@ -1,20 +1,24 @@
 package org.example.controller;
 
 import lombok.*;
+import org.example.model.Passenger;
+import org.example.model.Ticket;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
 public class PaymentOperation extends Operation {
-    private double totalPayment;
-    private List<Integer> ticketIDList;
+    @Getter private Map<String, Double> paymentPerTicket;
 
-    public PaymentOperation(double totalPayment) {
-        this.totalPayment = totalPayment;
-        this.ticketIDList = new ArrayList<Integer>();
+    public PaymentOperation(String type, Passenger passenger) {
+        super(type, LocalDateTime.now(), passenger.getUserID());
+        this.paymentPerTicket = new HashMap<>();
     }
+
 }

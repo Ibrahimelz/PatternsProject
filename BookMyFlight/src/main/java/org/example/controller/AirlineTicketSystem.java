@@ -15,7 +15,7 @@ public class AirlineTicketSystem {
     @Getter
     private static List<Ticket> unbookedTickets;
     @Getter
-    private static List<Ticket> paymentHistory;
+    private static List<PaymentOperation> paymentHistory;
     @Getter
     private static List<Passenger> passengers;
     @Getter
