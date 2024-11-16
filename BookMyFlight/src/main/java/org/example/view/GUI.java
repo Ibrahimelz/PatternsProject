@@ -1,5 +1,5 @@
 package org.example.view;
 
-public class ViewClass{
+public class GUI {
 
 }
