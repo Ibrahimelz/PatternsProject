@@ -13,5 +13,4 @@ public class Airplane {
     private String assignedAirline;
     private int availableSeats;
     private String type;
-
 }

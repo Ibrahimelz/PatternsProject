@@ -10,7 +10,9 @@ import lombok.*;
 @EqualsAndHashCode
 public class Ticket {
     private String ticketID;
-    @Getter private String passengerID;
+    @Getter
+    @Setter
+    private String passengerID;
     private Airplane airplane;
     private String outboundDate;
     private String returnDate;
