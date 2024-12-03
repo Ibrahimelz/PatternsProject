@@ -1,12 +1,15 @@
-package org.example.controller;
+package org.example;
 
 import org.example.model.*;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class DatabaseController {
+public class DatabaseControllerTest {
     private static final String DATABASE_PATH = "jdbc:sqlite:./src/main/resources/database/systemdata.db";
 
     private static Connection getConnection() {
@@ -91,8 +94,8 @@ public class DatabaseController {
                     phone_number TEXT NOT NULL,
                     email TEXT NOT NULL,
                     password TEXT NOT NULL,
-                    bonus_discount REAL ,
-                    limited_wifi TEXT  
+                    bonusDiscount REAL ,
+                    limitedWifi TEXT  
                 )
                 """;
 
@@ -108,8 +111,8 @@ public class DatabaseController {
         String sql = """
                 CREATE TABLE IF NOT EXISTS operation(
                     user_id TEXT NOT NULL, 
-                    date TEXT NOT NULL,
                     type TEXT NOT NULL ,
+                    date TEXT NOT NULL,
                     refunded_credit INTEGER ,
                     refunded_payment REAL,
                     total_payment REAL ,
@@ -263,36 +266,25 @@ public class DatabaseController {
         }
     }
 
-//    public static void updateTicketRecord(Ticket ticket) {
-//        String sql = "UPDATE ticket SET passenger_id = ? WHERE ticket_id = " + ticket.getTicketID();
-//
-//        try (Connection connection = getConnection();
-//             PreparedStatement statement = connection.prepareStatement(sql)) {
-//            statement.setString(1, ticket.getPassengerID());
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-    public static void updateTicketRecord(Ticket ticket, String passenger_id) {
+    public static void updateTicketrecord(Ticket ticket) {
         String sql = "UPDATE ticket SET passenger_id = ? WHERE ticket_id = " + ticket.getTicketID();
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, passenger_id);
+            statement.setString(1, ticket.getPassengerID());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static List<Ticket> queryTicketsAll() {
+    public static List<Ticket> queryTicketAll() {
         String sql = """
                         SELECT ticket.*, airplaine.* 
                         FROM ticket
                         JOIN airplane 
                         ON ticket.airplane_id = airplane.airplane_id
                 """;
-        List<Ticket> tickets = new LinkedList<>();
+        List<Ticket> tickets = new ArrayList<>();
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -323,87 +315,6 @@ public class DatabaseController {
         return tickets;
     }
 
-    public static List<Ticket> queryUnbookedTicketsAll() {
-        String sql = """
-                        SELECT ticket.*, airplaine.* 
-                        FROM ticket
-                        JOIN airplane 
-                        ON ticket.airplane_id = airplane.airplane_id
-                        WHERE passenger_id = 
-                """ + null + """
-                , status = 
-                """ + "UNBOOKED";
-        List<Ticket> tickets = new LinkedList<>();
-
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                Ticket ticket = new Ticket();
-                Airplane airplane = new Airplane();
-                airplane.setAirplaneID(resultSet.getString("airplane_id"));
-                airplane.setAssignedAirline(resultSet.getString("assigned_airline"));
-                airplane.setAvailableSeats(resultSet.getInt("available_seats"));
-                airplane.setType(resultSet.getString("type"));
-                ticket.setAirplane(airplane);
-                ticket.setTicketID(resultSet.getString("ticket_id"));
-                ticket.setPassengerID(resultSet.getString("passenger_id"));
-                ticket.setOutboundDate(resultSet.getString("outbound_date"));
-                ticket.setReturnDate(resultSet.getString("return_date"));
-                ticket.setPrice(resultSet.getDouble("price"));
-                ticket.setTripType(resultSet.getString("trip_type"));
-                ticket.setStatus(TicketStatus.valueOf(resultSet.getString("status")));
-                ticket.setSeatType(SeatClass.valueOf(resultSet.getString("seat_type")));
-                ticket.setDeparture(resultSet.getString("departure"));
-                ticket.setDestination(resultSet.getString("destination"));
-                tickets.add(ticket);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return tickets;
-    }
-
-    public static List<Ticket> queryBookedTicketsAll(String passenger_id) {
-        String sql = """
-                        SELECT ticket.*, airplaine.* 
-                        FROM ticket
-                        JOIN airplane 
-                        ON ticket.airplane_id = airplane.airplane_id
-                        WHERE passenger_id = 
-                """ + passenger_id + """
-                , status = 
-                """ + "BOOKED";
-        List<Ticket> tickets = new LinkedList<>();
-
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                Ticket ticket = new Ticket();
-                Airplane airplane = new Airplane();
-                airplane.setAirplaneID(resultSet.getString("airplane_id"));
-                airplane.setAssignedAirline(resultSet.getString("assigned_airline"));
-                airplane.setAvailableSeats(resultSet.getInt("available_seats"));
-                airplane.setType(resultSet.getString("type"));
-                ticket.setAirplane(airplane);
-                ticket.setTicketID(resultSet.getString("ticket_id"));
-                ticket.setPassengerID(resultSet.getString("passenger_id"));
-                ticket.setOutboundDate(resultSet.getString("outbound_date"));
-                ticket.setReturnDate(resultSet.getString("return_date"));
-                ticket.setPrice(resultSet.getDouble("price"));
-                ticket.setTripType(resultSet.getString("trip_type"));
-                ticket.setStatus(TicketStatus.valueOf(resultSet.getString("status")));
-                ticket.setSeatType(SeatClass.valueOf(resultSet.getString("seat_type")));
-                ticket.setDeparture(resultSet.getString("departure"));
-                ticket.setDestination(resultSet.getString("destination"));
-                tickets.add(ticket);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return tickets;
-    }
 
     public static List<Passenger> queryPassengerAll() {
         String sql = "SELECT * FROM passenger";
@@ -444,7 +355,8 @@ public class DatabaseController {
         List<Employee> employees = new ArrayList<>();
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+             ResultSet resultSet = statement.executeQuery(sql);
+        ) {
             while (resultSet.next()) {
                 Employee employee = new Employee();
                 employee.setUserID(resultSet.getString("employee_id"));
@@ -461,29 +373,9 @@ public class DatabaseController {
         return employees;
     }
 
-    public static List<Airplane> queryAirplaneAll() {
-        String sql = "SELECT * FROM airplane";
-        List<Airplane> airplanes = new ArrayList<>();
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
-            while (resultSet.next()) {
-                Airplane airplane = new Airplane();
-                airplane.setAirplaneID(resultSet.getString("airplane_id"));
-                airplane.setAssignedAirline(resultSet.getString("assigned_airline"));
-                airplane.setAvailableSeats(resultSet.getInt("available_seats"));
-                airplane.setType(resultSet.getString("type"));
-                airplanes.add(airplane);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return airplanes;
-    }
-
     public static List<CancelOperation> queryAllCancelOperations() {
         String sql = "SELECT * FROM operation WHERE type = 'CancelOperation'";
-        List<CancelOperation> cancelOperations = new LinkedList<>();
+        List<CancelOperation> cancelOperations = new ArrayList<>();
 
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
@@ -505,7 +397,7 @@ public class DatabaseController {
 
     public static List<PaymentOperation> queryAllPaymentOperations() {
         String sql = "SELECT * FROM operation WHERE type = 'PaymentOperation'";
-        List<PaymentOperation> paymentOperations = new LinkedList<>();
+        List<PaymentOperation> paymentOperations = new ArrayList<>();
 
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement();

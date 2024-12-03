@@ -12,14 +12,14 @@ import java.util.Queue;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Employee extends User {
     @Getter
     private static Queue<Ticket> ticketsToCancel = new PriorityQueue<>();
 
     public Employee(String firstName, String lastName, String phoneNumber, String email, String password) {
-        super(generateId(), firstName, lastName, phoneNumber, email, password);
+        super(firstName, lastName, phoneNumber, email, password);
     }
 
     /**
@@ -30,7 +30,7 @@ public class Employee extends User {
      * @param tickets   the tickets that will be booked
      * @param passenger the passenger that wants to book the ticket
      */
-    @Override
+
     public void bookTickets(Passenger passenger, List<Ticket> tickets) {
         if (AirLineTicketSystemController.findUserInSystem(passenger.getEmail()) == null) {
             throw new IllegalArgumentException("Wrong Passenger Credentials");
@@ -38,4 +38,15 @@ public class Employee extends User {
         super.bookTickets(passenger, tickets);
     }
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "userID='" + userID + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

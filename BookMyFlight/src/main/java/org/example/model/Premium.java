@@ -2,7 +2,7 @@ package org.example.model;
 
 import lombok.*;
 
-
+@NoArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class Premium extends Passenger {

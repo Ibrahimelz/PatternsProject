@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.example.view.Payment">
+  <grid id="27dc6" binding="PaymentPanel" layout-manager="GridLayoutManager" row-count="9" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="727" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="e7890" class="javax.swing.JComboBox" binding="allTicketsComboBox">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="7" vsize-policy="0" hsize-policy="2" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <model>
+            <item value="Select a ticket"/>
+          </model>
+        </properties>
+      </component>
+      <component id="1521c" class="javax.swing.JLabel" binding="ticketIdLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="110" height="14"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Ticket id"/>
+        </properties>
+      </component>
+      <component id="5666b" class="javax.swing.JLabel" binding="departureLabel2">
+        <constraints>
+          <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Departure"/>
+        </properties>
+      </component>
+      <component id="bde63" class="javax.swing.JLabel" binding="destinationLabel2">
+        <constraints>
+          <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Destination"/>
+        </properties>
+      </component>
+      <component id="ddfb0" class="javax.swing.JLabel" binding="priceLabel">
+        <constraints>
+          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Price"/>
+        </properties>
+      </component>
+      <component id="e54ff" class="javax.swing.JLabel" binding="tripTypeLabel">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Trip type"/>
+        </properties>
+      </component>
+      <component id="9f1b1" class="javax.swing.JLabel" binding="seatClassLabel">
+        <constraints>
+          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Seat class"/>
+        </properties>
+      </component>
+      <component id="5b705" class="javax.swing.JLabel" binding="displayTicketIdLabel">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="2" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="........"/>
+        </properties>
+      </component>
+      <component id="9badb" class="javax.swing.JLabel" binding="displayDestinationLabel2">
+        <constraints>
+          <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="....."/>
+        </properties>
+      </component>
+      <component id="e91fb" class="javax.swing.JLabel" binding="returnDateLabel">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="110" height="14"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Return date"/>
+        </properties>
+      </component>
+      <component id="e46ea" class="javax.swing.JLabel" binding="displayReturnDateLabel">
+        <constraints>
+          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="....."/>
+        </properties>
+      </component>
+      <component id="6da4a" class="javax.swing.JLabel" binding="outboundDateLabel">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="110" height="14"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Outbound date"/>
+        </properties>
+      </component>
+      <component id="aa0e5" class="javax.swing.JLabel" binding="displayTripTypeLabel">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="......"/>
+        </properties>
+      </component>
+      <component id="7bdf0" class="javax.swing.JLabel" binding="destinationLabel1">
+        <constraints>
+          <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Destination"/>
+        </properties>
+      </component>
+      <component id="26029" class="javax.swing.JLabel" binding="departureLabel1">
+        <constraints>
+          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Departure"/>
+        </properties>
+      </component>
+      <component id="16366" class="javax.swing.JComboBox" binding="quantityComboBox">
+        <constraints>
+          <grid row="0" column="7" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <model>
+            <item value="Select quantity"/>
+            <item value="1"/>
+            <item value="2"/>
+            <item value="3"/>
+            <item value="4"/>
+            <item value="5"/>
+            <item value="6"/>
+            <item value="7"/>
+            <item value="8"/>
+            <item value="9"/>
+            <item value="10"/>
+          </model>
+        </properties>
+      </component>
+      <component id="75b4b" class="javax.swing.JButton" binding="checkoutButton">
+        <constraints>
+          <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Checkout"/>
+        </properties>
+      </component>
+      <component id="5f98b" class="javax.swing.JButton" binding="exitButton">
+        <constraints>
+          <grid row="8" column="7" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Exit"/>
+        </properties>
+      </component>
+      <component id="68cff" class="javax.swing.JLabel" binding="displayOutboundDateLabel">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="24" height="14"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="....."/>
+        </properties>
+      </component>
+      <component id="7c038" class="javax.swing.JLabel" binding="displayDepartureLabel2">
+        <constraints>
+          <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="....."/>
+        </properties>
+      </component>
+      <component id="513d4" class="javax.swing.JLabel" binding="displayDestinationLabel1">
+        <constraints>
+          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="....."/>
+        </properties>
+      </component>
+      <component id="26583" class="javax.swing.JLabel" binding="displayDepartureLabel1">
+        <constraints>
+          <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="....."/>
+        </properties>
+      </component>
+      <component id="bdf61" class="javax.swing.JLabel" binding="displaySeatClassLabel">
+        <constraints>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="....."/>
+        </properties>
+      </component>
+      <component id="b3211" class="javax.swing.JLabel" binding="ticketPriceLabel">
+        <constraints>
+          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="....."/>
+        </properties>
+      </component>
+      <component id="91eb4" class="javax.swing.JLabel" binding="creditAmountLabel">
+        <constraints>
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Credits"/>
+        </properties>
+      </component>
+      <component id="e6b06" class="javax.swing.JLabel" binding="displayCreditAmountLabel">
+        <constraints>
+          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="...."/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

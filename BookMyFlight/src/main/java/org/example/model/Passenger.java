@@ -1,8 +1,10 @@
 package org.example.model;
 
 import lombok.*;
+import org.example.controller.DatabaseController;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -11,11 +13,14 @@ import java.util.*;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class Passenger extends User {
+@AllArgsConstructor
+@NoArgsConstructor
+
+public abstract class Passenger extends User {
     @Getter
     protected int credits;
     @Getter
-    protected int cardNumber;
+    protected String cardNumber;
     @Getter
     protected String cardHolderName;
     @Getter
@@ -27,15 +32,16 @@ public class Passenger extends User {
     @Getter
     protected List<CancelOperation> refundList;
 
+
     public Passenger(String firstName, String lastName, String phoneNumber, String email, String password) {
-        super(generateId(), firstName, lastName, phoneNumber, email, password);
-        this.cardNumber = 0;
+        super( firstName, lastName, phoneNumber, email, password);
+        this.cardNumber = null;
         this.cardHolderName = null;
         this.cardExpirationDate = null;
         this.cvc = 0;
         this.credits = 0;
-        this.ticketsList = new LinkedList<>();
-        this.refundList = new LinkedList<>();
+        this.ticketsList = DatabaseController.queryUnbookedTicketsAll();
+        this.refundList = DatabaseController.queryAllCancelOperations();
     }
 
     /**
@@ -46,7 +52,7 @@ public class Passenger extends User {
      * @param cvc                cvc that they have entered
      * @return true if their input is valid
      */
-    public boolean validatePaymentInput(String cardNumber, String cardHolderName, String cardExpirationDate, String cvc) {
+    public static boolean validatePaymentInput(String cardNumber, String cardHolderName, String cardExpirationDate, String cvc) {
         LocalDate present = LocalDate.now();
         if ((!cardNumber.matches("\\d{13,19}"))) {
             return false;
@@ -57,10 +63,10 @@ public class Passenger extends User {
         if (!cardExpirationDate.matches("^(0[1-9]|1[0-2])/\\d{2}$")) {
             return false;
         }
-        if (cvc.matches("\\d{100,999}")) {
+        if (!cvc.matches("\\d{3,4}")) {
             return false;
         }
-        if (!isCardExpired(cardExpirationDate)) {
+        if (isCardExpired(cardExpirationDate)) {
             return false;
         }
         return true;
@@ -81,16 +87,13 @@ public class Passenger extends User {
      * @param cardExpirationDate the input card expiration date
      * @return true if the card is expired and false if the card is not expired
      */
-    private boolean isCardExpired(String cardExpirationDate) {
+    public static boolean isCardExpired(String cardExpirationDate) {
         try {
             DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/yy");
-            LocalDate date = LocalDate.parse(cardExpirationDate, format);
-            if (!date.isBefore(LocalDate.now())) {
-                return true;
-            }
+            YearMonth expiry = YearMonth.parse(cardExpirationDate, format);
+            return expiry.isBefore(YearMonth.now());
         } catch (DateTimeParseException e) {
             return true;
         }
-        return false;
     }
 }

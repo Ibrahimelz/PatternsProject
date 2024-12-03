@@ -12,13 +12,11 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 public class CancelOperation extends Operation {
     private double refundedMoney;
-    private String ticketID;
     private int refundedCredit;
 
     public CancelOperation(String passengerID, double refundedMoney, String ticketID, int refundedCredit) {
-        super("Cancel Operation", LocalDateTime.now(), passengerID);
+        super("Cancel Operation", LocalDateTime.now(),ticketID, passengerID);
         this.refundedMoney = refundedMoney;
-        this.ticketID = ticketID;
         this.refundedCredit = refundedCredit;
     }
 }

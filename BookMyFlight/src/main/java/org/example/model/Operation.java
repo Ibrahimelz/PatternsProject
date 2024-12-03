@@ -14,4 +14,5 @@ public abstract class Operation {
     private String type;
     private LocalDateTime date;
     private String userId;
+    private String ticketID;
 }

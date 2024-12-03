@@ -10,7 +10,15 @@ public class AirLineTicketSystemController {
 
     public AirLineTicketSystemController() {
         this.airlineTicketSystem = AirlineTicketSystem.getInstance();
-        //initSystem();
+        initSystem();
+    }
+
+    public static void initSystem() {
+        DatabaseController.createTableEmployee();
+        DatabaseController.createTablePassenger();
+        DatabaseController.createTableAirplane();
+        DatabaseController.createTableOperation();
+        DatabaseController.createTableTicket();
     }
 
     /**

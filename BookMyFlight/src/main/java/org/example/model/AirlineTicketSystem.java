@@ -1,6 +1,7 @@
 package org.example.model;
 
 import lombok.*;
+import org.example.controller.DatabaseController;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -19,12 +20,15 @@ public class AirlineTicketSystem {
     private List<Passenger> passengers;
     @Getter
     private List<Employee> employees;
+    @Getter
+    private List<Airplane> airplanes;
 
     private AirlineTicketSystem() {
-        this.unbookedTickets = new LinkedList<>(); //todo
-        this.paymentHistory = new ArrayList<>(); //todo
-        this.passengers = new ArrayList<>(); //todo
-        this.employees = new ArrayList<>(); //todo
+        this.unbookedTickets = DatabaseController.queryUnbookedTicketsAll(); //todo update ticket method by the passengerID ensuite branche le dans le AilineTicketSystem
+        this.paymentHistory =  DatabaseController.queryAllPaymentOperations();
+        this.passengers = DatabaseController.queryPassengerAll();
+        this.employees = DatabaseController.queryEmployeeAll();
+        this.airplanes = DatabaseController.queryAirplaneAll();
     }
 
     public static AirlineTicketSystem getInstance() {

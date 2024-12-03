@@ -1,12 +1,13 @@
 package org.example.controller;
 
+import lombok.AllArgsConstructor;
 import org.example.model.Passenger;
 import org.example.model.PaymentOperation;
 import org.example.model.Ticket;
 import org.example.model.User;
 
 import java.util.List;
-
+@AllArgsConstructor
 public class UserController {
     private User user;
 
@@ -32,7 +33,7 @@ public class UserController {
      * @param totalAmount amount that will be paid for the ticket
      */
     private void createPaymentOperation(Ticket ticket, double totalAmount, Passenger passenger) {
-        PaymentOperation paymentOperation = new PaymentOperation(passenger);
+        PaymentOperation paymentOperation = new PaymentOperation(passenger, ticket);
         paymentOperation.getPaymentPerTicket().put(ticket.getTicketID(), totalAmount);
     }
 
@@ -51,14 +52,15 @@ public class UserController {
      * @return the discount
      */
     public double calculateDiscountWithCredits(int passengerCredits) {
-        if (passengerCredits < user.getCREDIT_AMOUNT_1()) {
-            return user.getDISCOUNT_AMOUNT_1();
-        } else if (passengerCredits < user.getCREDIT_AMOUNT_2()) {
-            return user.getDISCOUNT_AMOUNT_2();
-        } else if (passengerCredits < user.getCREDIT_AMOUNT_3()) {
-            return user.getDISCOUNT_AMOUNT_3();
-        } else if (passengerCredits < user.getCREDIT_AMOUNT_4()) {
-            return user.getDISCOUNT_AMOUNT_4();
+        if (passengerCredits == user.getCREDIT_FIVE_PERCENT()) {
+            return 0.05;
+        } else if (passengerCredits > user.getCREDIT_FIVE_PERCENT() && passengerCredits <= user.getCREDIT_TEN_PERCENT()) {
+            return 0.1;
+        } else if (passengerCredits > user.getCREDIT_TEN_PERCENT() && passengerCredits <= user.getCREDIT_FIFTEEN_PERCENT()) {
+            return 0.15;
+        } else if ((passengerCredits > user.getCREDIT_FIFTEEN_PERCENT() && passengerCredits <= user.getCREDIT_TWENTY_PERCENT())
+                    || passengerCredits >= user.getCREDIT_TWENTY_PERCENT()) {
+            return 0.2;
         } else {
             return 0.0;
         }
@@ -75,17 +77,16 @@ public class UserController {
     }
 
     /**
-     * Deducts credits from the amount of credits of a passenger after he had a discount
+     * Deducts credits from the amount of credits of a passenger after he had a discount**WRONG**
      * @param discount the input discount
      */
     public int deductCredit(double discount) {
         return switch (String.valueOf(discount)) {
-            case "0.05" -> user.getCREDIT_AMOUNT_1();
-            case "0.1" -> user.getCREDIT_AMOUNT_2();
-            case "0.15" -> user.getCREDIT_AMOUNT_3();
-            case "0.2" -> user.getCREDIT_AMOUNT_4();
+            case "0.05" -> user.getCREDIT_FIVE_PERCENT();
+            case "0.1" -> user.getCREDIT_TEN_PERCENT();
+            case "0.15" -> user.getCREDIT_FIFTEEN_PERCENT();
+            case "0.2" -> user.getCREDIT_TWENTY_PERCENT();
             default -> 0;
         };
     }
-
 }

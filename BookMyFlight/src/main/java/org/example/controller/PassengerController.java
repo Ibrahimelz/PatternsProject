@@ -1,7 +1,9 @@
 package org.example.controller;
 
+import lombok.AllArgsConstructor;
 import org.example.model.*;
 
+@AllArgsConstructor
 public class PassengerController {
     private Passenger passenger;
 
@@ -14,15 +16,15 @@ public class PassengerController {
      * @param password    password entered by the passenger
      * @return return true if the passenger was successfully created
      */
-    public boolean addRegularPassenger(String firstName, String LastName, String phoneNumber, String email, String password) {
-        if (!passenger.validateInputUserCreation(firstName, LastName, phoneNumber, email, password)) {
-            throw new IllegalArgumentException("Passenger information provided is incorrect!");
+    public static boolean addRegularPassenger(String firstName, String LastName, String phoneNumber, String email, String password) {
+        if (!Passenger.validateInputUserCreation(firstName, LastName, phoneNumber, email, password)) {
+            throw new IllegalArgumentException("User information provided is incorrect!");
         }
         if (AirLineTicketSystemController.findUserInSystem(email) != null) {
             throw new IllegalArgumentException("Account already exists!");
         }
         Passenger passenger = new Regular(firstName, LastName, phoneNumber, email, password);
-        AirlineTicketSystem.getInstance().getPassengers().add(passenger);
+        DatabaseController.insertPassengerRecord(passenger);
         return true;
     }
 

@@ -1,12 +1,17 @@
 package org.example.controller;
 
+import lombok.AllArgsConstructor;
 import org.example.model.*;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@AllArgsConstructor
 public class EmployeeController {
     private Employee employee;
 
@@ -18,63 +23,71 @@ public class EmployeeController {
      * @param email       of the employee
      * @param password    of the employee
      */
-    public void addEmployee(String firstName, String LastName, String phoneNumber, String email, String password) {
-        if (!employee.validateInputUserCreation(firstName, LastName, phoneNumber, email, password)) {
-            throw new IllegalArgumentException("Passenger information provided is incorrect!");
+    public static boolean addEmployee(String firstName, String LastName, String phoneNumber, String email, String password) {
+        if (!Employee.validateInputUserCreation(firstName, LastName, phoneNumber, email, password)) {
+            throw new IllegalArgumentException("User information provided is incorrect!");
         }
         if (AirLineTicketSystemController.findUserInSystem(email) != null) {
             throw new IllegalArgumentException("Account already exists!");
         }
         Employee employee = new Employee(firstName, LastName, phoneNumber, email, password);
-        AirlineTicketSystem.getInstance().getEmployees().add(employee);
+        DatabaseController.insertEmployeeRecord(employee);
+        return true;
     }
 
 
     /**
-     * Removes ticket from passengers booked tickets list
+     * Removes ticket from passengers booked tick
      * @return ticket that has been cancelled
      */
-    public Ticket removeTicket() {
+    public void removeTicket() {
         Ticket ticketCancelled = employee.getTicketsToCancel().peek();
-        double refundedMoney = 0;
+
         Passenger passengerOwner = null;
+
+        if (employee.getTicketsToCancel().size() == 0) {
+            return;
+        }
+
         for (Passenger passenger : AirlineTicketSystem.getInstance().getPassengers()) {
             if (passenger.getUserID().equals(ticketCancelled.getPassengerID())) {
                 passengerOwner = passenger;
-            } else {
-                return null;
             }
         }
-        double totalAmount = 0;
+
+        double refundMoney = 0;
         for (PaymentOperation operation : AirlineTicketSystem.getInstance().getPaymentHistory()) {
-            totalAmount = operation.getPaymentPerTicket().get(ticketCancelled.getTicketID());
+            refundMoney = operation.getPaymentPerTicket().get(ticketCancelled.getTicketID());
         }
-        double refundMoney = totalAmount;
+
         double discountUsed = ((100 * refundMoney) / ticketCancelled.getPrice()) / 100;
         passengerOwner.getTicketsList().remove(ticketCancelled);
-        UserController userController = new UserController();
+        UserController userController = new UserController(employee);
         passengerOwner.setCredits(passengerOwner.getCredits() + userController.deductCredit(discountUsed));
         CancelOperation cancelOperation = new CancelOperation(passengerOwner.getUserID(), refundMoney, ticketCancelled.getTicketID(), userController.deductCredit(discountUsed));
         passengerOwner.getRefundList().add(cancelOperation);
-        return ticketCancelled;
+        //OR RETURN THE ticketCancelled
     }
 
     /**
      * Writes a list of comma-separated strings into a file
-     * @param path the path of the file
-     * @param data the data to write
+     * @param operation cancel operation that will be "printed" as a proof of receipt
      */
-    public static void writeFileTable(String path, List<String> data) {
-        File file = new File(path);
-        try (FileWriter fw = new FileWriter(file, true)) {
-            for (String line : data) {
-                fw.write(line + "\n");
-            }
+    public static void writeRefundFile(CancelOperation operation) {
+        LocalTime time = LocalTime.now();
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH-mm-ss");
+        String formattedTime = time.format(timeFormatter);
+
+        String userHome = System.getProperty("user.home");
+        String desktopPath = userHome + "/Desktop";
+        String filePath = desktopPath + "/refund" + formattedTime + ".txt";
+
+        try {
+            FileWriter myWriter = new FileWriter(filePath);
+            myWriter.write(operation.toString());
+            myWriter.close();
         } catch (IOException e) {
-            System.out.println(String.format("%s: %s", e.getClass(), e.getMessage()));
+            e.printStackTrace();
         }
     }
-
-
-
 }
