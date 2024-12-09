@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserControllerTest {
     protected static Airplane airplane = new Airplane();
     protected static Passenger p = new Regular("Rauw", "John", "1234567890", "rauw@gmail.com", "kash#!$H");
-    protected static UserController u = new UserController(p);
+    protected static UserController u = new UserController();
 
     @Test
     void payForTickets_CalculateSum() {

@@ -13,7 +13,6 @@ public class Airplane {
     private String assignedAirline;
     private int availableSeats;
     private String type;
-
     private static int counter = 1;
 
     public Airplane(String assignedAirline, int availableSeats, String type) {

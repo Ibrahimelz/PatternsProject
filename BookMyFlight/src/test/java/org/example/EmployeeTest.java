@@ -15,13 +15,5 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EmployeeTest {
 
-    @Test
-    void bookTickets_BookTicketsForNonexistentPassenger() {
-        Employee e = new Employee();
-        Ticket t = new Ticket();
-        List<Ticket> tickets = new ArrayList<>(List.of(t));
-        Passenger p = new Regular("Jeffrey", "Johnston", "2345678921", "jeffrey@gmail.com", "123@snadLDB3$@2");
-        Exception executable = assertThrows(IllegalArgumentException.class, () -> e.bookTickets(p, tickets));
-        assertEquals("Wrong Passenger Credentials", executable.getMessage());
-    }
+
 }

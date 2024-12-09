@@ -15,7 +15,7 @@ public class CancelOperation extends Operation {
     private int refundedCredit;
 
     public CancelOperation(String passengerID, double refundedMoney, String ticketID, int refundedCredit) {
-        super("Cancel Operation", LocalDateTime.now(),ticketID, passengerID);
+        super("Cancel Operation", LocalDateTime.now(), ticketID, passengerID);
         this.refundedMoney = refundedMoney;
         this.refundedCredit = refundedCredit;
     }

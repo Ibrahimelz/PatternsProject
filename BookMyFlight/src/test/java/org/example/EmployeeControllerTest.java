@@ -3,6 +3,9 @@ package org.example;
 import org.example.controller.DatabaseController;
 import org.example.controller.EmployeeController;
 import org.example.model.Employee;
+import org.example.model.Passenger;
+import org.example.model.Regular;
+import org.example.model.Ticket;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +27,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> employee.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -36,7 +39,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> employee.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -48,7 +51,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> employee.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -60,7 +63,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> employee.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -72,7 +75,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117A";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> employee.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -84,7 +87,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117*";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> employee.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -96,7 +99,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117 ";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> employee.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -108,7 +111,7 @@ class EmployeeControllerTest {
         String phoneNumber = "438002111";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> employee.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -120,7 +123,7 @@ class EmployeeControllerTest {
         String phoneNumber = "438002111111";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> employee.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -144,7 +147,7 @@ class EmployeeControllerTest {
         String phoneNumber = " ";
         String email = "maria@gmail.com";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> EmployeeController.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -156,7 +159,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117";
         String email = "maria@gmailcom";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> EmployeeController.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -168,7 +171,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117";
         String email = "mariagmailcom";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> EmployeeController.addEmployee("Carl", "Anderson", phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -180,7 +183,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117";
         String email = "@mariagmailcom";
         String password = "R@ah!&uDnDS";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> EmployeeController.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -192,7 +195,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117";
         String email = "maria1@gmail.com";
         String password = "R@a";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> EmployeeController.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -204,7 +207,7 @@ class EmployeeControllerTest {
         String phoneNumber = "4380021117";
         String email = "maria1@gmail.com";
         String password = "R@aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaa";
-        EmployeeController employee = new EmployeeController(e1);
+        EmployeeController employee = new EmployeeController();
         Exception exception = assertThrows(IllegalArgumentException.class, () -> EmployeeController.addEmployee(firstName, lastName, phoneNumber, email, password));
         assertEquals("User information provided is incorrect!", exception.getMessage());
     }
@@ -222,17 +225,14 @@ class EmployeeControllerTest {
         assertEquals(expResult, result);
     }
 
-
-
-    //TODO HOW CAN I TEST THE WRITETOFILE METHOD IF EVERYTHING IS FORMATED INSIDE THE METHOD + ITS VOID
-
-
-
-
-
-
-
-
-
-
+    @Test
+    void bookTickets_BookTicketsForNonexistentPassenger() {
+        Employee e = new Employee();
+        Ticket t = new Ticket();
+        List<Ticket> tickets = new ArrayList<>(List.of(t));
+        EmployeeController employee = new EmployeeController();
+        Passenger p = new Regular("Jeffrey", "Johnston", "2345678921", "jeffrey@gmail.com", "123@snadLDB3$@2");
+        Exception executable = assertThrows(IllegalArgumentException.class, () -> employee.bookTickets(p, tickets));
+        assertEquals("Wrong Passenger Credentials", executable.getMessage());
+    }
 }

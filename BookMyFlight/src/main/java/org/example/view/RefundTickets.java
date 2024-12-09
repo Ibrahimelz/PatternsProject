@@ -1,30 +1,49 @@
 package org.example.view;
 
+import lombok.Getter;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 public class RefundTickets {
     private JPanel refundTicketsPanel;
     private JButton logoutButton;
-
-    public RefundTickets(CardLayout cardLayout, JPanel cardPanel) {
-        refundTicketsPanel = new JPanel();
-        logoutButton = new JButton("Logout");
-        refundTicketsPanel.add(logoutButton);
-
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "Login");
-            }
-        });
-
-        cardPanel.add(refundTicketsPanel, "RefundTickets");
-    }
+    private JButton refundTicketsButton;
+    private JList allChosenTicketsList;
+    private JLabel ticketCancelLabel;
+    private JLabel displayNextTicketToCancel;
+    private JLabel instructionsLabel;
+    private JButton languageButton;
 
     public JPanel getRefundTicketsPanel() {
         return refundTicketsPanel;
+    }
+
+    public JButton getRefundTicketsButton() {
+        return refundTicketsButton;
+    }
+
+    public JList getAllChosenTicketsList() {
+        return allChosenTicketsList;
+    }
+
+    public JLabel getTicketCancelLabel() {
+        return ticketCancelLabel;
+    }
+
+    public JLabel getDisplayNextTicketToCancel() {
+        return displayNextTicketToCancel;
+    }
+
+    public JLabel getInstructionsLabel() {
+        return instructionsLabel;
+    }
+
+    public JButton getLanguageButton() {
+        return languageButton;
+    }
+
+    public JButton getLogoutButton() {
+        return logoutButton;
     }
 }

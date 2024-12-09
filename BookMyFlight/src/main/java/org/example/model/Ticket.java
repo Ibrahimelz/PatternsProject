@@ -6,7 +6,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @EqualsAndHashCode
 public class Ticket {
     @Getter
@@ -42,7 +41,6 @@ public class Ticket {
     @Getter
     @Setter
     private String destination;
-
     private static int counter = 1;
 
     public Ticket(Airplane airplane, String outboundDate, String returnDate, double price,
@@ -62,5 +60,22 @@ public class Ticket {
 
     private static String generateId() {
         return String.format("000%02d", counter++);
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "ticketID='" + ticketID + '\'' +
+                ", passengerID='" + passengerID + '\'' +
+                ", airplane=" + airplane +
+                ", outboundDate='" + outboundDate + '\'' +
+                ", returnDate='" + returnDate + '\'' +
+                ", price=" + price +
+                ", tripType='" + tripType + '\'' +
+                ", status=" + status +
+                ", seatType=" + seatType +
+                ", departure='" + departure + '\'' +
+                ", destination='" + destination + '\'' +
+                '}';
     }
 }

@@ -24,8 +24,8 @@ public class AirlineTicketSystem {
     private List<Airplane> airplanes;
 
     private AirlineTicketSystem() {
-        this.unbookedTickets = DatabaseController.queryUnbookedTicketsAll(); //todo update ticket method by the passengerID ensuite branche le dans le AilineTicketSystem
-        this.paymentHistory =  DatabaseController.queryAllPaymentOperations();
+        this.unbookedTickets = DatabaseController.queryUnbookedTicketsAll();
+        this.paymentHistory = DatabaseController.queryAllPaymentOperations();
         this.passengers = DatabaseController.queryPassengerAll();
         this.employees = DatabaseController.queryEmployeeAll();
         this.airplanes = DatabaseController.queryAirplaneAll();
